@@ -7,3 +7,29 @@ test('uncertain external delivery is fenced against blind retry and corrected co
 test('cross-scope source and mixed artifact editions cannot enter a package',()=>{assert.throws(()=>propose(c,createReleaseState(c,['owner']),{id:'bad',artifacts:[{...artifact,sourceBindings:[{...bind('source'),ref:{...bind('source').ref,tenantId:'beta'}}]}],audience:'private',destination:'archive',external:false}));assert.throws(()=>propose(c,createReleaseState(c,['owner']),{id:'bad',artifacts:[artifact,artifact],audience:'private',destination:'archive',external:false}));});
 
 test('a viewer cannot operate the external gateway',()=>{const viewer={...c,actor:{...c.actor,roles:['viewer']}};assert.throws(()=>recordDelivery(viewer,setup(),'package','fake',null),{code:'gateway_required'});});
+
+test('proposal binds the same artifact snapshot that passed scope validation',()=>{
+ let reads=0;
+ const supplied={...artifact,get ref(){return ++reads<=4?artifact.ref:{...artifact.ref,tenantId:'beta'};}};
+ const state=propose(c,createReleaseState(c,['owner']),{id:'snapshot',artifacts:[supplied],audience:'private-review',destination:'archive',external:false});
+ assert.equal(reads,1);assert.deepEqual(state.manifests[0]!.artifacts[0]!.ref,artifact.ref);
+});
+
+test('proposal identity and destination fields are read once before validation',()=>{
+ let idReads=0,destinationReads=0,externalReads=0;
+ const proposal={get id(){return ++idReads<=2?'new':'package';},artifacts:[artifact],audience:'private-review',
+  get destination(){return ++destinationReads===1?'archive':'';},get external(){return ++externalReads===1?false:true;}};
+ const state=propose(c,setup(),proposal);
+ assert.equal(idReads,1);assert.equal(destinationReads,1);assert.equal(externalReads,1);
+ assert.equal(state.manifests.at(-1)!.id,'new');assert.equal(state.manifests.at(-1)!.destination,'archive');assert.equal(state.manifests.at(-1)!.external,false);
+});
+
+test('nested cross-scope decisions are rejected from the captured proposal and caller buffers remain detached',()=>{
+ const proposal={id:'snapshot',artifacts:[structuredClone(artifact)],audience:'review',destination:'archive',external:false};
+ const state=propose(c,createReleaseState(c,['owner']),proposal);
+ proposal.artifacts[0]!.label='changed';proposal.artifacts[0]!.sourceBindings[0]!.ref.id='changed';
+ assert.equal(state.manifests[0]!.artifacts[0]!.label,artifact.label);
+ assert.equal(state.manifests[0]!.artifacts[0]!.sourceBindings[0]!.ref.id,'source');
+ const bad={...artifact,rightsDecision:{...bind('rights'),ref:{...bind('rights').ref,projectId:'other'}}};
+ assert.throws(()=>propose(c,createReleaseState(c,['owner']),{...proposal,artifacts:[bad]}),{code:'scope_denied'});
+});
