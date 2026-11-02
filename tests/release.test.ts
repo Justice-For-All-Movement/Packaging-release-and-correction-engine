@@ -27,7 +27,7 @@ test('proposal identity and destination fields are read once before validation',
 test('nested cross-scope decisions are rejected from the captured proposal and caller buffers remain detached',()=>{
  const proposal={id:'snapshot',artifacts:[structuredClone(artifact)],audience:'review',destination:'archive',external:false};
  const state=propose(c,createReleaseState(c,['owner']),proposal);
- proposal.artifacts[0]!.label='changed';proposal.artifacts[0]!.sourceBindings[0]!.ref.id='changed';
+ proposal.artifacts[0]!.label='changed';(proposal.artifacts[0]!.sourceBindings[0]!.ref as {id:string}).id='changed';
  assert.equal(state.manifests[0]!.artifacts[0]!.label,artifact.label);
  assert.equal(state.manifests[0]!.artifacts[0]!.sourceBindings[0]!.ref.id,'source');
  const bad={...artifact,rightsDecision:{...bind('rights'),ref:{...bind('rights').ref,projectId:'other'}}};
