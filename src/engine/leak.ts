@@ -156,7 +156,12 @@ function htmlText(html: string): string {
 /** Extracts the human-readable text of a component (documents via pdftotext / DOCX XML / plain text). */
 export async function extractText(path: string, bytes: Uint8Array, kind: FileKind): Promise<string> {
   if (kind === 'text') { const t = new TextDecoder().decode(bytes); return extname(path).toLowerCase() === '.html' ? `${htmlText(t)}\n${t}` : t; }
-  if (kind === 'pdf') return (await run('pdftotext', ['-enc', 'UTF-8', '-', '-'], { input: bytes, timeoutMs: 120_000 })).stdout.toString('utf8');
+  if (kind === 'pdf') {
+    // Reading order and content-stream order: a name split by table layout in one is usually contiguous in the other.
+    const a = await run('pdftotext', ['-enc', 'UTF-8', '-', '-'], { input: bytes, timeoutMs: 120_000 });
+    const b = await run('pdftotext', ['-enc', 'UTF-8', '-raw', '-', '-'], { input: bytes, timeoutMs: 120_000 });
+    return `${a.stdout.toString('utf8')}\n${b.stdout.toString('utf8')}`;
+  }
   if (kind === 'docx') return zipRead(bytes, 256 * 1024 * 1024).filter((e) => /\.(xml|rels)$/.test(e.path)).map((e) => htmlText(new TextDecoder().decode(e.bytes))).join('\n');
   return '';
 }
