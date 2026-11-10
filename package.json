@@ -23,6 +23,18 @@
     "./identity-private-html-http": {
       "types": "./dist/identity-private-html-http.d.ts",
       "default": "./dist/identity-private-html-http.js"
+    },
+    "./engine": {
+      "types": "./dist/engine/index.d.ts",
+      "default": "./dist/engine/index.js"
+    },
+    "./serve": {
+      "types": "./dist/engine/serve.d.ts",
+      "default": "./dist/engine/serve.js"
+    },
+    "./service-kit": {
+      "types": "./dist/service-kit.d.ts",
+      "default": "./dist/service-kit.js"
     }
   },
   "engines": {
@@ -33,7 +45,8 @@
     "test": "node --test tests/*.test.ts",
     "check": "npm run typecheck && npm test && npm run build && node scripts/validate-pr-registry.mjs",
     "build": "tsc -p tsconfig.build.json",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "serve": "node src/engine/serve.ts"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.12",
@@ -44,11 +57,13 @@
   "files": [
     "dist",
     "README.md",
-    "docs"
+    "docs",
+    "examples"
   ],
   "dependencies": {
     "@accountability/evidence": "git+https://github.com/Justice-For-All-Movement/Evidence-Storage-and-Provenance-Engine.git#dce7105a70b42d77afe4cd48d34723331447037c",
     "@accountability/identity-policy": "git+https://github.com/Justice-For-All-Movement/Identity-Authorization-and-Policy-Engine.git#763060ddc840979b56483afd830f78679a2369b0",
+    "nodemailer": "6.9.16",
     "pg": "8.23.1"
   }
 }
