@@ -38,6 +38,7 @@
   "devDependencies": {
     "@electric-sql/pglite": "0.5.12",
     "@types/node": "26.6.5",
+    "@types/pg": "8.23.1",
     "typescript": "7.0.2"
   },
   "files": [
@@ -46,7 +47,8 @@
     "docs"
   ],
   "dependencies": {
-    "@accountability/evidence": "git+https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine.git#dce7105a70b42d77afe4cd48d34723331447037c",
-    "@accountability/identity-policy": "git+https://github.com/neophilism/Identity-Authorization-and-Policy-Engine.git#763060ddc840979b56483afd830f78679a2369b0"
+    "@accountability/evidence": "git+https://github.com/Justice-For-All-Movement/Evidence-Storage-and-Provenance-Engine.git#dce7105a70b42d77afe4cd48d34723331447037c",
+    "@accountability/identity-policy": "git+https://github.com/Justice-For-All-Movement/Identity-Authorization-and-Policy-Engine.git#763060ddc840979b56483afd830f78679a2369b0",
+    "pg": "8.23.1"
   }
 }
