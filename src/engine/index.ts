@@ -356,7 +356,9 @@ export function createEngine(deps: ReleaseDeps) {
     const hidden = new Set((input.protectedSourceRefs ?? []) as string[]);
     const pub = (refs: readonly string[]): string[] => [...new Set(refs)].filter((r) => !hidden.has(r)).sort();
     const candidateId = randomUUID(); const salt = randomBytes(16).toString('hex');
-    const leakReport = { passed: findings.length === 0, findings: findingsJson(findings), redactions: asJson(redactions), protectedTermCount: matcher.count };
+    // A path or note that itself contains a protected term is withheld from the stored report.
+    const safe = (v: string): string => (matcher.scan(v, { filename: true }).length > 0 ? '[withheld: contains a protected term]' : v);
+    const leakReport = { passed: findings.length === 0, findings: findingsJson(findings.map((f) => ({ ...f, path: safe(f.path), detail: safe(f.detail) }))), redactions: asJson(redactions.map((r) => ({ ...r, path: safe(r.path), detail: safe(r.detail) }))), protectedTermCount: matcher.count };
     const participants = [...new Set(input.participantReviewers ?? [])].map((p) => str(p, 'participant', 200));
     const baseRow = { lineageId, version, supersedes, salt, hashes: matcher.hashes(salt), participants };
 
