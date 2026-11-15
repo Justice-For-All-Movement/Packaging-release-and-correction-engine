@@ -21,3 +21,7 @@ Durable HTML qualification: six new restricted-migration groups and all29 ordina
 An opt-in current-Identity private HTML Fetch handler now connects actual stored human-owner sessions to Packaging own-DB exact-edition preparation, with post-lock/current-input/render live-clock checks. This is partial host integration, not distributed revocation or delivery/storage proof. See IDENTITY_PRIVATE_HTML_HTTP.md for trust boundaries and pending qualification.
 
 An explicit resource-aware private HTML factory additionally opts into accepted Identity resource restrictions for a canonical manifest binding and rechecks current human-owner authority before own-DB preparation. Sequential observations are not an external permission fence; the legacy factory remains unchanged. See RESOURCE_PRIVATE_HTML.md.
+
+## Immutable proposal admission
+
+Proposal creation detaches its context and captures the complete proposed manifest input before validation. Scope, duplicate identity, destination, external/private mode and every artifact/decision binding are checked against the same snapshot later appended to history. Caller getters or later mutation cannot substitute a different identity, foreign-scope reference or destination between validation and persistence. This local snapshot does not authenticate source decisions or authorize publication; current host policy, listed human approval and external-disabled defaults remain unchanged.

@@ -215,7 +215,10 @@ export function propose(
     external: boolean;
   },
 ): ReleaseState {
+  c = structuredClone(c);
   guard(c, s);
+  // Validate and persist one detached proposal, never a later caller property read.
+  input = structuredClone(input);
   nonempty(input.id, "manifest id", 128);
   nonempty(input.audience, "audience", 200);
   nonempty(input.destination, "destination", 200);

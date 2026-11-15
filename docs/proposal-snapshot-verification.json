@@ -1,0 +1,9 @@
+{
+  "unitId":"PRC-001",
+  "baseSha":"dfb64da9aa2f369c9f61d6205e5710baa8a5e622",
+  "scope":"Validate and persist the same detached private manifest proposal",
+  "beforeFix":{"command":"node --test tests/release.test.ts","passed":7,"failed":2,"cases":["Artifact reference read five times, with foreign-scope clone after admission","Identity/destination/mode re-read after duplicate and field validation"]},
+  "afterFix":{"command":"node --test tests/release.test.ts","passed":9,"failed":0,"coverage":["One captured artifact reference","One captured identity/destination/mode","Nested cross-scope decision denial and caller mutation isolation","Existing human approval, private default, exact decision, expiry, uncertain delivery and correction checks"]},
+  "review":["Context detached before admission","Whole proposal cloned before validation; only captured data appended","No owner approval, publication policy, receipt or uncertainty gate weakened"],
+  "limits":["Focused local suite only; full typecheck/build/dependency-backed suites require exact-head CI","No real publication, private artifact transfer, deployment or live acceptance"]
+}
