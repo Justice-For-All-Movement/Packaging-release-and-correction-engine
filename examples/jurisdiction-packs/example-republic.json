@@ -1,0 +1,44 @@
+{
+  "id": "example-republic",
+  "name": "Example Republic (fictional jurisdiction for tests and demonstrations)",
+  "version": 1,
+  "language": "en",
+  "assumptions": [
+    "The Example Republic is fictional. Its statutes, bodies and procedures do not exist and must never be used in a real matter.",
+    "The matter is assumed to fall within the national (not regional) jurisdiction of the Example Republic."
+  ],
+  "authorities": [
+    { "id": "open-records-act-s4", "citation": "Open Records Act 2001 (Example Republic), section 4", "title": "Right to request records held by public bodies", "reviewed": true, "reviewedBy": "Fictional deployment legal lead", "reviewedOn": "2026-01-15" },
+    { "id": "open-records-act-s9", "citation": "Open Records Act 2001 (Example Republic), section 9", "title": "Time limit for responding to a request", "reviewed": false, "note": "Supplied by the deployment; not yet reviewed." },
+    { "id": "public-conduct-code-r12", "citation": "Public Conduct Code (Example Republic), rule 12", "title": "Duty to declare conflicts of interest", "reviewed": true, "reviewedBy": "Fictional deployment legal lead", "reviewedOn": "2026-01-15" }
+  ],
+  "documentTypes": {
+    "records_request": {
+      "title": "Request for records",
+      "placeholders": [
+        { "name": "date", "required": true, "description": "Date of the letter" },
+        { "name": "date_range", "required": false, "description": "Period the records should cover" }
+      ],
+      "sections": [
+        { "id": "parties", "heading": "Requester and recipient", "body": "Date: {{var:date}}\n\nFrom:\n\n{{requester}}\n\nTo:\n\n{{recipient}}" },
+        { "id": "legal_basis", "heading": "Legal basis", "body": "This request is made under {{authority:open-records-act-s4}}. A response is requested within the period set by {{authority:open-records-act-s9}}." },
+        { "id": "records", "heading": "Records sought", "body": "Please provide the following records for the period {{var:date_range}}:\n\n{{records_sought}}" },
+        { "id": "format", "heading": "Form of response", "body": "Please provide the records in electronic form. If any record is withheld, please identify it and state the ground relied on." }
+      ]
+    },
+    "oversight_complaint": {
+      "title": "Complaint to an oversight body",
+      "placeholders": [
+        { "name": "oversight_body", "required": true, "description": "Name of the body the complaint is addressed to" },
+        { "name": "complainant", "required": true, "description": "Name of the complainant" }
+      ],
+      "assumptions": [ "The named oversight body is assumed to have competence over the conduct described; this has not been checked." ],
+      "sections": [
+        { "id": "addressee", "heading": "Addressee and complainant", "body": "To: {{var:oversight_body}}\n\nComplainant: {{var:complainant}}" },
+        { "id": "facts", "heading": "Statement of facts", "body": "The complainant relies on the following established facts:\n\n{{facts:established}}\n\nThe following matters are disputed or not yet known and are stated as such:\n\n{{facts:disputed}}\n\n{{facts:unknown}}" },
+        { "id": "grounds", "heading": "Grounds", "body": "The conduct described may engage {{authority:public-conduct-code-r12}} and {{authority:sanctions-provision}}." },
+        { "id": "request", "heading": "Request", "body": "The complainant asks the oversight body to examine the matters set out above." }
+      ]
+    }
+  }
+}
